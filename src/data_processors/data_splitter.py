@@ -4,10 +4,9 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 
+
+
 class DataSplitter:
-    '''
-    The purpose of this class is to process the data from a table of predictors over time and where the last column is the class identifier.
-    '''
     def __init__(self, dataframe, time_steps=10, batch_size=32, device='cpu'):
         self.seq_len = time_steps
         self.batch_size = batch_size
@@ -56,7 +55,7 @@ class DataSplitter:
 
 
         # Create DataLoaders
-        self.train_loader = DataLoader(list(zip(self.X_train, self.y_train)), batch_size=self.batch_size, shuffle=False)
+        self.train_loader = DataLoader(list(zip(self.X_train, self.y_train)), batch_size=self.batch_size, shuffle=True)
         self.test_loader = DataLoader(list(zip(self.X_test, self.y_test)), batch_size=self.batch_size, shuffle=False)
         self.val_loader = DataLoader(list(zip(self.X_val, self.y_val)), batch_size=self.batch_size, shuffle=False)
         
