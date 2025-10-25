@@ -212,7 +212,6 @@ def save_and_count_spike_dataframe(spike_df, session_number, output_dir, timeste
 
 
 def normalize_firing_rates(df):
-    """Normalize the firing rates by calculating z-scores."""
     df_copy = df.drop('frame', axis=1)
     normalized_firing_rates = (df_copy - df_copy.mean()) / df_copy.std()
     normalized_firing_rates.insert(0, 'frame', df['frame'])
@@ -247,7 +246,7 @@ def get_session_ids(cache):
 
 
 
-def master_function(session_number, output_dir="/proj/STOR/pipiras/Neuropixel/parent_Daniel/output", timesteps_per_frame=10, timeout=300):
+def master_function(session_number, output_dir="/proj/STOR/pipiras/Neuropixel/Neuropixels-Pipeline-Refactor/output", timesteps_per_frame=10, timeout=300):
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
