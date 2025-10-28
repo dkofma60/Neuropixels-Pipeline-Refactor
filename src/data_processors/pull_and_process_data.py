@@ -246,7 +246,7 @@ def get_session_ids(cache):
 
 
 
-def master_function(session_number, output_dir="/proj/STOR/pipiras/Neuropixel/Neuropixels-Pipeline-Refactor/output", timesteps_per_frame=10, timeout=300):
+def master_function(session_number, output_dir="/proj/STOR/pipiras/Neuropixel/Neuropixels-Pipeline-Refactor/src/output", timesteps_per_frame=10, timeout=300):
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
@@ -266,7 +266,7 @@ def master_function(session_number, output_dir="/proj/STOR/pipiras/Neuropixel/Ne
         # Load the spike trains 
         with open(spike_trains_file_path, 'rb') as f:
             spike_df_raw = pickle.load(f)
-        print(f"Loaded spike trains dataset: {type(spike_df)}")
+        print(f"Loaded spike trains dataset: {type(spike_df_raw)}")
 
         print(f"Total time elapsed: {time.time() - start_time:.2f} seconds")
         return spike_df_raw

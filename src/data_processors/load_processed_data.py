@@ -4,12 +4,6 @@ import pandas as pd
 
 
 
-def check_file_exists(session_id, file_prefix, output_dir="output", timesteps_per_frame=10):
-    pickle_path = os.path.join(output_dir, f"{file_prefix}_{session_id}_{timesteps_per_frame}.pkl")
-    return os.path.exists(pickle_path)
-
-
-
 def load_pickle_file(pickle_path):
     if os.path.exists(pickle_path):
         with open(pickle_path, 'rb') as f:
@@ -39,11 +33,12 @@ def clean_avg_firing_rates(df, highest_value, lowest_value):
 
 
 
-def master_cleaning_and_saving(session_id, original_pickle_prefix, output_dir='output', timesteps_per_frame=10, new_pickle_prefix='normalized_firing_rates', highest_value=100, lowest_value=0):
+def master_cleaning_and_saving(session_id, original_pickle_prefix, output_dir='/proj/STOR/pipiras/Neuropixel/Neuropixels-Pipeline-Refactor/src/output', timesteps_per_frame=10, new_pickle_prefix='normalized_firing_rates', highest_value=100, lowest_value=0):
+
+    original_pickle_path = os.path.join(output_dir, f'{original_pickle_prefix}_{session_id}_{timesteps_per_frame}.pkl')
+    
     # Check if the original pickle file exists
-    if check_file_exists(session_id, output_dir, original_pickle_prefix, timesteps_per_frame):
-        # Construct the path to the original pickle file
-        original_pickle_path = os.path.join(output_dir, f'{original_pickle_prefix}_{session_id}_{timesteps_per_frame}.pkl')
+    if os.path.exists(original_pickle_path):
 
         # Load the original data
         spike_df = load_pickle_file(original_pickle_path)
@@ -55,7 +50,7 @@ def master_cleaning_and_saving(session_id, original_pickle_prefix, output_dir='o
         filtered_normalized_firing_rates = filtered_normalized_firing_rates[filtered_normalized_firing_rates['frame'] != -1]
 
         # Construct the path to the new pickle file
-        new_pickle_path = os.path.join(output_dir, f'{new_pickle_prefix}_{session_id}.pkl')
+        new_pickle_path = os.path.join(output_dir, f'{new_pickle_prefix}_{session_id}_{timesteps_per_frame}.pkl')
 
         # Save the cleaned data
         save_pickle_file(filtered_normalized_firing_rates, new_pickle_path)
