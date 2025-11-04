@@ -211,14 +211,6 @@ def save_and_count_spike_dataframe(spike_df, session_number, output_dir, timeste
 
 
 
-def normalize_firing_rates(df):
-    df_copy = df.drop('frame', axis=1)
-    normalized_firing_rates = (df_copy - df_copy.mean()) / df_copy.std()
-    normalized_firing_rates.insert(0, 'frame', df['frame'])
-    return normalized_firing_rates
-
-
-
 def filter_and_save_neurons(normalized_firing_rates, highest_value=100, lowest_value=0, session_number=None, output_dir=None): #TODO: Don't use mask??
     # Filter neurons
     selected_neurons_mask = (normalized_firing_rates > highest_value).any() | (normalized_firing_rates < lowest_value).any()
