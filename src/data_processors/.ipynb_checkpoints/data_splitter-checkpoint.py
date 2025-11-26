@@ -7,14 +7,14 @@ from torch.utils.data import DataLoader
 
 
 class DataSplitter:
-    def __init__(self, dataframe, time_steps=10, batch_size=32, device='cpu'):
+    def __init__(self, dataframe, time_steps, batch_size=32, device='cuda'):
         self.seq_len = time_steps
         self.batch_size = batch_size
         self.device = device
         self.dataframe = dataframe
         self.X, self.y = self._prepare_data()
         self.X = self.remove_0_columns(self.X)
-        self._create_loaders()
+        #self._create_loaders()
     
     def _prepare_data(self):
         X = self.dataframe.iloc[:, :-1].values
@@ -33,8 +33,8 @@ class DataSplitter:
     def _split_and_reshape(self, X, y):
         num_samples = X.shape[0] // self.seq_len
         num_features = X.shape[1]  # This should be the total number of features (N * F)
-        X = X[:num_samples * self.seq_len].reshape(num_samples, self.seq_len, num_features, 1)
-        y = y[:num_samples * self.seq_len].reshape(num_samples, self.seq_len, 1)[:, -1]
+        X = X[:num_samples * self.seq_len].reshape(num_samples, self.seq_len, num_features)
+        y = y[:num_samples * self.seq_len].reshape(num_samples, self.seq_len)[:, -1]
         return X, y
 
     def _create_loaders(self):
