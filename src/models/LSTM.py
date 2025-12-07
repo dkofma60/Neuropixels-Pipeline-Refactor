@@ -39,7 +39,7 @@ def train_and_eval(hidden_dim, layer_dim, learning_rate, num_epochs, data_splitt
         val_or_test_loader = data_splitter.test_loader
     
     best_epoch_idx = 0
-    best_val_acc = 0.0
+    best_acc = 0.0
 
     # Training loop
     for epoch in range(num_epochs):
@@ -70,15 +70,15 @@ def train_and_eval(hidden_dim, layer_dim, learning_rate, num_epochs, data_splitt
                 total_test_samples += labels.shape[0]
 
         train_acc = correct_train_preds / total_train_samples * 100
-        val_acc = correct_test_preds / total_test_samples * 100
-        print(f"Epoch {epoch+1}/{num_epochs} | Train Acc: {train_acc:.2f}% | Val Acc: {val_acc:.2f}%")
+        acc = correct_test_preds / total_test_samples * 100
+        print(f"Epoch {epoch+1}/{num_epochs} | Train Acc: {train_acc:.2f}% | Val/Test Acc: {acc:.2f}%")
 
-        if val_acc > best_val_acc:
-            best_val_acc = val_acc
+        if acc > best_acc:
+            best_acc = acc
             best_epoch_idx = epoch
     
-    print(f"Best epoch: {best_epoch_idx} | Best Val Acc: {best_val_acc:.2f}%")
-    return best_epoch_idx, best_val_acc
+    print(f"Best epoch: {best_epoch_idx} | Best Val Acc: {best_acc:.2f}%")
+    return best_epoch_idx, best_acc, acc
 
 
 

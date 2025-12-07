@@ -210,28 +210,6 @@ def save_and_count_spike_dataframe(spike_df, session_number, output_dir, timeste
     return file_name
 
 
-
-def filter_and_save_neurons(normalized_firing_rates, highest_value=100, lowest_value=0, session_number=None, output_dir=None): #TODO: Don't use mask??
-    # Filter neurons
-    selected_neurons_mask = (normalized_firing_rates > highest_value).any() | (normalized_firing_rates < lowest_value).any()
-    filtered_normalized_firing_rates = normalized_firing_rates.loc[:, selected_neurons_mask]
-    
-    # Check for NaN values
-    nan_present = filtered_normalized_firing_rates.isna().any().any()
-    print(f"There {'are' if nan_present else 'are no'} NaN values in the DataFrame")
-    
-    # Save the filtered data, if session_number and output_dir are provided
-    if session_number is not None and output_dir is not None:
-        file_name = f'filtered_normalized_pickle_{session_number}.pkl'
-        file_path = os.path.join(output_dir, file_name)
-        with open(file_path, 'wb') as f:
-            pickle.dump(filtered_normalized_firing_rates, f)
-        print(f"Filtered normalized firing rates saved to {file_path}")
-        
-    return filtered_normalized_firing_rates
-
-
-
 def get_session_ids(cache):
     session_table = cache.get_session_table()
     return session_table.index.tolist()

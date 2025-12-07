@@ -14,7 +14,7 @@ class DataSplitter:
         self.dataframe = dataframe
         self.X, self.y = self._prepare_data()
         self.X = self.remove_0_columns(self.X)
-        #self._create_loaders()
+        self._create_loaders()
     
     def _prepare_data(self):
         X = self.dataframe.iloc[:, :-1].values
