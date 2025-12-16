@@ -8,7 +8,8 @@ from data_processors.data_splitter import DataSplitter
 
 
 
-def train_and_eval(hidden_dim, layer_dim, learning_rate, num_epochs, data_splitter, validation=True):
+def train_and_eval(hidden_dim, layer_dim, learning_rate, num_epochs, data_splitter, validation=True, input_dropout_p=0.15, output_dropout_p=0.15):
+#def train_and_eval(hidden_dim, layer_dim, learning_rate, num_epochs, data_splitter, input_dropout_p, output_dropout_p, validation=True):
     
     device = data_splitter.X_train.device
     input_dim = data_splitter.X_train.shape[-1]
@@ -17,20 +18,28 @@ def train_and_eval(hidden_dim, layer_dim, learning_rate, num_epochs, data_splitt
     class LSTMModel(nn.Module):
         def __init__(self, input_dim, hidden_dim, layer_dim, output_dim):
             super(LSTMModel, self).__init__()
+            #self.input_dropout = nn.Dropout(input_dropout_p)
             self.hidden_dim = hidden_dim
             self.layer_dim = layer_dim
             self.lstm = nn.LSTM(input_dim, hidden_dim, layer_dim, batch_first=True)
+            #self.output_dropout = nn.Dropout(output_dropout_p)
             self.fc = nn.Linear(hidden_dim, output_dim)
 
         def forward(self, x):
+            #x = self.input_dropout(x)
             out, (hn, cn) = self.lstm(x)
             out = self.fc(out[:, -1, :])
+            #out = out[:, -1, :]
+            #out = self.output_dropout(out)
+            #out = self.fc(out)
             return out
     
     
     model = LSTMModel(input_dim, hidden_dim, layer_dim, output_dim).to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    #optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-3)
+
 
     train_loader = data_splitter.train_loader
     if validation:

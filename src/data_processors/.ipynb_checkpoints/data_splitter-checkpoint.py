@@ -12,6 +12,7 @@ class DataSplitter:
         self.batch_size = batch_size
         self.device = device
         self.dataframe = dataframe
+        self.dataframe = dataframe[dataframe.iloc[:, -1] != -1]
         self.X, self.y = self._prepare_data()
         self.X = self.remove_0_columns(self.X)
         self._create_loaders()
